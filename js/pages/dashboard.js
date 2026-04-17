@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const stats = await api.get('/stats');
 
     // Update stat cards
-    const statValues = document.querySelectorAll('.text-2xl.font-bold.text-gray-900');
-    if (statValues[0]) statValues[0].textContent = `$${stats.total_revenue.toLocaleString()}`;
-    if (statValues[1]) statValues[1].textContent = stats.total_orders.toLocaleString();
-    if (statValues[2]) statValues[2].textContent = stats.total_customers.toLocaleString();
-    if (statValues[3]) statValues[3].textContent = stats.total_products.toLocaleString();
+    const statCards = document.querySelectorAll('.grid.grid-cols-1.sm\\:grid-cols-2.xl\\:grid-cols-4 > div');
+    if (statCards[0]) statCards[0].querySelector('.text-2xl').textContent = `$${stats.total_revenue.toLocaleString()}`;
+    if (statCards[1]) statCards[1].querySelector('.text-2xl').textContent = stats.total_orders.toLocaleString();
+    if (statCards[2]) statCards[2].querySelector('.text-2xl').textContent = stats.total_customers.toLocaleString();
+    if (statCards[3]) statCards[3].querySelector('.text-2xl').textContent = stats.total_products.toLocaleString();
 
     // Update sidebar products count badge
     document.querySelectorAll('.sidebar-text').forEach(el => {
