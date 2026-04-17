@@ -21,6 +21,25 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.3s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
@@ -162,115 +181,93 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-    <!-- Customer Card 1 -->
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+<div id="customers-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <!-- Skeleton Cards -->
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
         <div class="flex justify-between items-start mb-4">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white flex items-center justify-center text-xl font-bold shadow-md">
-                    SJ
-                </div>
+                <div class="skeleton w-14 h-14 rounded-full"></div>
                 <div>
-                    <h3 class="font-bold text-gray-900">Sarah Jenkins</h3>
-                    <p class="text-sm text-gray-500">Detroit, MI</p>
+                    <div class="skeleton h-5 w-32 mb-1"></div>
+                    <div class="skeleton h-4 w-20"></div>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            <div class="skeleton w-4 h-6"></div>
         </div>
-        <div class="space-y-3 mb-6">
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-regular fa-envelope w-5 text-gray-400"></i> sarah@example.com
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-solid fa-phone w-5 text-gray-400"></i> (555) 123-4567
-            </div>
+        <div class="space-y-3 mb-6 mt-6">
+            <div class="skeleton h-4 w-48"></div>
+            <div class="skeleton h-4 w-32"></div>
         </div>
-        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-6">
             <div>
-                <p class="text-xs text-gray-500 mb-1">Total Spent</p>
-                <p class="font-semibold text-gray-900">$1,249.00</p>
+                <div class="skeleton h-3 w-16 mb-1"></div>
+                <div class="skeleton h-5 w-24"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
             <div>
-                <p class="text-xs text-gray-500 mb-1">Orders</p>
-                <p class="font-semibold text-gray-900">12</p>
+                <div class="skeleton h-3 w-12 mb-1"></div>
+                <div class="skeleton h-5 w-8"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
-            <button class="text-sm font-medium text-brand-600 hover:text-brand-700">View Profile</button>
+            <div class="skeleton h-4 w-20"></div>
         </div>
     </div>
-
-    <!-- Customer Card 2 -->
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
         <div class="flex justify-between items-start mb-4">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center text-xl font-bold shadow-md">
-                    MW
-                </div>
+                <div class="skeleton w-14 h-14 rounded-full"></div>
                 <div>
-                    <h3 class="font-bold text-gray-900">Marcus Wright</h3>
-                    <p class="text-sm text-gray-500">Austin, TX</p>
+                    <div class="skeleton h-5 w-32 mb-1"></div>
+                    <div class="skeleton h-4 w-20"></div>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            <div class="skeleton w-4 h-6"></div>
         </div>
-        <div class="space-y-3 mb-6">
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-regular fa-envelope w-5 text-gray-400"></i> m.wright@example.com
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-solid fa-phone w-5 text-gray-400"></i> (555) 987-6543
-            </div>
+        <div class="space-y-3 mb-6 mt-6">
+            <div class="skeleton h-4 w-48"></div>
+            <div class="skeleton h-4 w-32"></div>
         </div>
-        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-6">
             <div>
-                <p class="text-xs text-gray-500 mb-1">Total Spent</p>
-                <p class="font-semibold text-gray-900">$4,590.20</p>
+                <div class="skeleton h-3 w-16 mb-1"></div>
+                <div class="skeleton h-5 w-24"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
             <div>
-                <p class="text-xs text-gray-500 mb-1">Orders</p>
-                <p class="font-semibold text-gray-900">3</p>
+                <div class="skeleton h-3 w-12 mb-1"></div>
+                <div class="skeleton h-5 w-8"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
-            <button class="text-sm font-medium text-brand-600 hover:text-brand-700">View Profile</button>
+            <div class="skeleton h-4 w-20"></div>
         </div>
     </div>
-
-    <!-- Customer Card 3 -->
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
         <div class="flex justify-between items-start mb-4">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center text-xl font-bold shadow-md">
-                    EG
-                </div>
+                <div class="skeleton w-14 h-14 rounded-full"></div>
                 <div>
-                    <h3 class="font-bold text-gray-900">Elena Gomez</h3>
-                    <p class="text-sm text-gray-500">Miami, FL</p>
+                    <div class="skeleton h-5 w-32 mb-1"></div>
+                    <div class="skeleton h-4 w-20"></div>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            <div class="skeleton w-4 h-6"></div>
         </div>
-        <div class="space-y-3 mb-6">
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-regular fa-envelope w-5 text-gray-400"></i> elena.g@example.com
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-                <i class="fa-solid fa-phone w-5 text-gray-400"></i> (555) 456-7890
-            </div>
+        <div class="space-y-3 mb-6 mt-6">
+            <div class="skeleton h-4 w-48"></div>
+            <div class="skeleton h-4 w-32"></div>
         </div>
-        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-6">
             <div>
-                <p class="text-xs text-gray-500 mb-1">Total Spent</p>
-                <p class="font-semibold text-gray-900">$125.00</p>
+                <div class="skeleton h-3 w-16 mb-1"></div>
+                <div class="skeleton h-5 w-24"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
             <div>
-                <p class="text-xs text-gray-500 mb-1">Orders</p>
-                <p class="font-semibold text-gray-900">1</p>
+                <div class="skeleton h-3 w-12 mb-1"></div>
+                <div class="skeleton h-5 w-8"></div>
             </div>
             <div class="w-px h-8 bg-gray-100"></div>
-            <button class="text-sm font-medium text-brand-600 hover:text-brand-700">View Profile</button>
+            <div class="skeleton h-4 w-20"></div>
         </div>
     </div>
 </div>

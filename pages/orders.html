@@ -21,6 +21,25 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.3s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
@@ -169,7 +188,7 @@
         </div>
         <div>
             <p class="text-gray-500 text-sm">Pending Orders</p>
-            <p class="text-2xl font-bold text-gray-900">14</p>
+            <p id="pending-count" class="text-2xl font-bold text-gray-900">...</p>
         </div>
     </div>
     <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
@@ -178,7 +197,7 @@
         </div>
         <div>
             <p class="text-gray-500 text-sm">Processing</p>
-            <p class="text-2xl font-bold text-gray-900">32</p>
+            <p id="processing-count" class="text-2xl font-bold text-gray-900">...</p>
         </div>
     </div>
     <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
@@ -186,8 +205,8 @@
             <i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i>
         </div>
         <div>
-            <p class="text-gray-500 text-sm">Completed This Week</p>
-            <p class="text-2xl font-bold text-gray-900">128</p>
+            <p class="text-gray-500 text-sm">Completed</p>
+            <p id="completed-count" class="text-2xl font-bold text-gray-900">...</p>
         </div>
     </div>
 </div>
@@ -216,63 +235,40 @@
                     <th class="px-6 py-4 font-medium text-right">Action</th>
                 </tr>
             </thead>
-            <tbody class="text-sm">
-                <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                    <td class="px-6 py-4 font-medium text-brand-600">#ORD-9932</td>
-                    <td class="px-6 py-4 text-gray-500">Oct 24, 2025 · 14:32</td>
+            <tbody id="orders-tbody" class="text-sm">
+                <!-- Skeleton Rows -->
+                <tr class="border-b border-gray-50">
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-32"></div></td>
                     <td class="px-6 py-4">
-                        <div>
-                            <p class="font-medium text-gray-900">Sarah Jenkins</p>
-                            <p class="text-xs text-gray-500">sarah@example.com</p>
-                        </div>
+                        <div class="skeleton h-4 w-24 mb-1"></div>
+                        <div class="skeleton h-3 w-32"></div>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600 border border-blue-100">
-                            Processing
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 font-semibold text-gray-900">$249.00</td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-brand-600 hover:text-brand-700 font-medium text-sm">View details</button>
-                    </td>
+                    <td class="px-6 py-4"><div class="skeleton h-6 w-20 rounded-full"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                    <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-20 ml-auto"></div></td>
                 </tr>
-                <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                    <td class="px-6 py-4 font-medium text-brand-600">#ORD-9931</td>
-                    <td class="px-6 py-4 text-gray-500">Oct 24, 2025 · 11:15</td>
+                <tr class="border-b border-gray-50">
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-32"></div></td>
                     <td class="px-6 py-4">
-                        <div>
-                            <p class="font-medium text-gray-900">Marcus Wright</p>
-                            <p class="text-xs text-gray-500">m.wright@example.com</p>
-                        </div>
+                        <div class="skeleton h-4 w-28 mb-1"></div>
+                        <div class="skeleton h-3 w-36"></div>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-600 border border-emerald-100">
-                            Completed
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 font-semibold text-gray-900">$1,499.00</td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-brand-600 hover:text-brand-700 font-medium text-sm">View details</button>
-                    </td>
+                    <td class="px-6 py-4"><div class="skeleton h-6 w-20 rounded-full"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                    <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-20 ml-auto"></div></td>
                 </tr>
-                <tr class="hover:bg-gray-50/50 transition-colors">
-                    <td class="px-6 py-4 font-medium text-brand-600">#ORD-9930</td>
-                    <td class="px-6 py-4 text-gray-500">Oct 23, 2025 · 09:45</td>
+                <tr class="border-b border-gray-50">
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-32"></div></td>
                     <td class="px-6 py-4">
-                        <div>
-                            <p class="font-medium text-gray-900">Elena Gomez</p>
-                            <p class="text-xs text-gray-500">elena.g@example.com</p>
-                        </div>
+                        <div class="skeleton h-4 w-20 mb-1"></div>
+                        <div class="skeleton h-3 w-40"></div>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600 border border-red-100">
-                            Refunded
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 font-semibold text-gray-900">$45.00</td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-brand-600 hover:text-brand-700 font-medium text-sm">View details</button>
-                    </td>
+                    <td class="px-6 py-4"><div class="skeleton h-6 w-20 rounded-full"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                    <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-20 ml-auto"></div></td>
                 </tr>
             </tbody>
         </table>

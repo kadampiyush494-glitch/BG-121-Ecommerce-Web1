@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
   updateUserUI(user);
 
-  const grid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.xl\\:grid-cols-3');
+  const grid = document.getElementById('customers-grid');
   const addBtn = document.querySelector('button .fa-user-plus')?.closest('button');
 
   const gradients = [
@@ -21,6 +21,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderCustomers(data.customers || []);
     } catch (err) {
       console.error('Failed to load customers:', err);
+      if (grid) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load customers</p>
+          <p class="text-xs mt-1 text-red-500">${err.message}</p>
+        </div>`;
+      }
     }
   }
 
@@ -30,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const initials = c.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
       const grad = gradients[i % gradients.length];
 
-      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow" data-id="${c.id}">
+      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow data-loaded" data-id="${c.id}">
         <div class="flex justify-between items-start mb-4">
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-full bg-gradient-to-br ${grad} text-white flex items-center justify-center text-xl font-bold shadow-md">${initials}</div>

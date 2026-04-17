@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
   updateUserUI(user);
 
-  const container = document.querySelector('.grid.grid-cols-1.gap-6');
+  const container = document.getElementById('reviews-grid');
 
   async function loadReviews() {
     try {
@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderReviews(data.reviews || []);
     } catch (err) {
       console.error('Failed to load reviews:', err);
+      if (container) {
+        container.innerHTML = `<div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load reviews</p>
+          <p class="text-xs mt-1 text-red-500">${err.message}</p>
+        </div>`;
+      }
     }
   }
 
@@ -26,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const initials = (r.product_name || 'XX').slice(0, 2).toUpperCase();
       const date = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-      return `<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+      return `<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm data-loaded">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">${initials}</div>

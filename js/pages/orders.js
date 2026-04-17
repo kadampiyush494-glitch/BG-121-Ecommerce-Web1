@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
   updateUserUI(user);
 
-  const tbody = document.querySelector('tbody');
+  const tbody = document.getElementById('orders-tbody');
   const filterBtns = document.querySelectorAll('.flex.gap-2 button');
   const searchInput = document.querySelector('.forge-input[placeholder*="Search order"]');
 
@@ -27,6 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateSummaryCards(data.orders || []);
     } catch (err) {
       console.error('Failed to load orders:', err);
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load orders</p>
+          <p class="text-xs mt-1 text-red-500">${err.message}</p>
+        </td></tr>`;
+      }
     }
   }
 
@@ -42,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const date = new Date(o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const time = new Date(o.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-      return `<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors" data-id="${o.id}">
+      return `<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors data-loaded" data-id="${o.id}">
         <td class="px-6 py-4 font-medium text-brand-600">#${o.id.slice(0, 8).toUpperCase()}</td>
         <td class="px-6 py-4 text-gray-500">${date} · ${time}</td>
         <td class="px-6 py-4">
@@ -74,10 +81,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const processing = allOrders.filter(o => o.status === 'pending').length; // same as pending for this UI
     const completed = allOrders.filter(o => o.status === 'completed').length;
 
-    const cards = document.querySelectorAll('.grid.grid-cols-1.sm\\:grid-cols-3 .text-2xl');
-    if (cards[0]) cards[0].textContent = pending;
-    if (cards[1]) cards[1].textContent = processing;
-    if (cards[2]) cards[2].textContent = completed;
+    const pCard = document.getElementById('pending-count');
+    const prCard = document.getElementById('processing-count');
+    const cCard = document.getElementById('completed-count');
+    
+    if (pCard) pCard.textContent = pending;
+    if (prCard) prCard.textContent = processing;
+    if (cCard) cCard.textContent = completed;
   }
 
   async function viewOrder(id) {
@@ -150,4 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   loadOrders();
+  
+  // Real-Time Auto Refresh every 10s
+  setInterval(() => loadOrders(currentFilter, searchInput ? searchInput.value : ''), 10000);
 });
