@@ -101,4 +101,21 @@ async function getStats(req, res) {
   }
 }
 
-module.exports = { getStats };
+async function wipeDummyData(req, res) {
+  try {
+    const collections = ['categories', 'products', 'inventory_logs', 'promotions', 'orders', 'customers'];
+    for (const collectionName of collections) {
+      const snapshot = await db.collection(collectionName).get();
+      const batch = db.batch();
+      snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+    }
+    res.json({ message: 'Dummy data successfully wiped from all collections.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server Error', message: err.message });
+  }
+}
+
+module.exports = { getStats, wipeDummyData };

@@ -47,4 +47,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
   }
+
+  // Wipe Data button
+  const wipeBtn = document.getElementById('btn-wipe-data');
+  if (wipeBtn) {
+    wipeBtn.addEventListener('click', async () => {
+      const confirmed = await showConfirmModal('Wipe All Dummy Data', 'Are you absolutely sure? This will delete ALL Products, Orders, Categories, Inventory, and Customers. This action cannot be undone.');
+      if (confirmed) {
+        const originalText = wipeBtn.innerHTML;
+        try {
+          wipeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Wiping...';
+          wipeBtn.disabled = true;
+          const resp = await api.post('/stats/wipe_data');
+          showToast(resp.message || 'Dummy data wiped successfully!', 'success');
+          setTimeout(() => window.location.reload(), 2000);
+        } catch (err) {
+          showToast(err.message || 'Failed to wipe data.', 'error');
+          wipeBtn.innerHTML = originalText;
+          wipeBtn.disabled = false;
+        }
+      }
+    });
+  }
 });
