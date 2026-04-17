@@ -1,19 +1,20 @@
 /**
  * ForgeAdmin - Firebase Client Configuration
- * Project: neurodb-6fcf5
+ * Project: e-commerce-7d1b7
  */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCI_C9z5SDr8rQNoj196ox8sV9kQhnQ5MQ", // Get from Firebase Console > Project Settings > General
-  authDomain: "neurodb-6fcf5.firebaseapp.com",
-  projectId: "neurodb-6fcf5",
-  storageBucket: "neurodb-6fcf5.appspot.com",
-  messagingSenderId: "434516415230",
-  appId: "1:434516415230:web:9b10ee6921abbc0e5dcbaf"
+  apiKey: "AIzaSyBvXgUiQoQOVSgm14EAzLNDWIUj7m8KykE",
+  authDomain: "e-commerce-7d1b7.firebaseapp.com",
+  projectId: "e-commerce-7d1b7",
+  storageBucket: "e-commerce-7d1b7.firebasestorage.app",
+  messagingSenderId: "648605209937",
+  appId: "1:648605209937:web:cde20e8e96bc90bbff6f70",
+  measurementId: "G-6HVNSW4145"
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const firebaseAuth = firebase.auth();
 
-console.log('🔥 Firebase initialized — project: neurodb-6fcf5');
+console.log('🔥 Firebase initialized — project: e-commerce-7d1b7');
