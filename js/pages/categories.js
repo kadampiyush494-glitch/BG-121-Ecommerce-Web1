@@ -1,13 +1,16 @@
 /**
- * ForgeAdmin - Categories Page Integration
+ * ForgeAdmin - Categories Page (Real-Time)
+ * Fetches real categories and product counts from /api/categories
+ * Computes dummy descriptions if none provided.
  */
 document.addEventListener('DOMContentLoaded', async () => {
   const user = requireAuth();
   if (!user) return;
   updateUserUI(user);
 
-  const grid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.xl\\:grid-cols-3');
-  const addBtn = document.querySelector('button .fa-plus')?.closest('button');
+  const grid = document.getElementById('categories-grid');
+  const addBtn = document.getElementById('add-category-btn');
+  const catBadge = document.getElementById('sidebar-category-count');
 
   const colorSets = [
     { bg: 'bg-brand-50', text: 'text-brand-500', hoverBg: 'group-hover:bg-brand-500', icon: 'fa-laptop' },
@@ -21,36 +24,66 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadCategories() {
     try {
       const data = await api.get('/categories');
-      renderCategories(data.categories || []);
+      const categories = data.categories || [];
+      renderCategories(categories);
+
+      // Also get product count for the sidebar badge
+      try {
+        const prodData = await api.get('/products?limit=1');
+        const prodBadge = document.getElementById('sidebar-product-count');
+        if (prodBadge) prodBadge.textContent = prodData.total || 0;
+      } catch (e) {}
+      
+      if (catBadge) catBadge.textContent = categories.length;
+
     } catch (err) {
       console.error('Failed to load categories:', err);
+      if (grid) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load categories</p>
+          <p class="text-xs mt-1">${err.message || 'Backend unavailable'}</p>
+        </div>`;
+      }
     }
   }
 
   function renderCategories(categories) {
     if (!grid) return;
+    
+    if (categories.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
+        <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
+        <p class="text-sm">No categories yet. Click "New Category" to create one.</p>
+      </div>`;
+      return;
+    }
+
     grid.innerHTML = categories.map((cat, i) => {
       const cs = colorSets[i % colorSets.length];
-      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow group" data-id="${cat.id}">
+      const count = cat.product_count || 0;
+      
+      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow group data-loaded" data-id="${cat.id}">
         <div class="flex items-center justify-between mb-6">
           <div class="w-14 h-14 ${cs.bg} rounded-2xl flex items-center justify-center ${cs.text} ${cs.hoverBg} group-hover:text-white transition-colors">
             <i class="fa-solid ${cs.icon} text-2xl"></i>
           </div>
-          <div class="flex gap-1">
-            <button class="text-gray-400 hover:text-brand-500 p-1 edit-cat" data-id="${cat.id}" data-name="${cat.name}"><i class="fa-solid fa-pen"></i></button>
-            <button class="text-gray-400 hover:text-red-500 p-1 delete-cat" data-id="${cat.id}"><i class="fa-solid fa-trash"></i></button>
+          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button class="text-gray-400 hover:text-brand-500 p-1 edit-cat" data-id="${cat.id}" data-name="${cat.name}" title="Edit"><i class="fa-solid fa-pen-to-square text-lg"></i></button>
+            <button class="text-gray-400 hover:text-red-500 p-1 delete-cat" data-id="${cat.id}" title="Delete"><i class="fa-solid fa-trash text-lg"></i></button>
           </div>
         </div>
         <h3 class="font-bold text-lg text-gray-900 mb-1">${cat.name}</h3>
+        <p class="text-sm text-gray-500 mb-6">${cat.name} products and accessories.</p>
         <div class="flex items-center justify-between pt-6 border-t border-gray-50">
           <div>
             <p class="text-xs text-gray-400 uppercase font-bold tracking-wider">Products</p>
-            <p class="font-bold text-gray-900">${cat.product_count || 0}</p>
+            <p class="font-bold text-gray-900">${count}</p>
           </div>
-          <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full">Active</span>
+          <span class="px-3 py-1 ${count > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-50 text-gray-500'} text-xs font-bold rounded-full">${count > 0 ? 'Active' : 'Empty'}</span>
         </div>
       </div>`;
-    }).join('') || '<p class="text-gray-400 col-span-full text-center py-12">No categories found.</p>';
+    }).join('');
 
     grid.querySelectorAll('.edit-cat').forEach(btn => {
       btn.addEventListener('click', async () => {

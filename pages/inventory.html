@@ -21,6 +21,25 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.3s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
@@ -136,48 +155,28 @@
                                 <th class="px-6 py-4 font-medium text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4 font-mono text-gray-500">FB-W-9912</td>
-                                <td class="px-6 py-4 font-bold text-gray-900">ForgeWatch Series 7</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div class="h-full bg-emerald-500 rounded-full" style="width: 85%"></div>
-                                        </div>
-                                        <span class="font-medium">124</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4"><span class="text-emerald-500 font-bold">In Stock</span></td>
-                                <td class="px-6 py-4 text-right"><button class="text-brand-500 font-bold hover:underline">Update</button></td>
+                        <tbody id="inventory-tbody" class="text-sm">
+                            <!-- Skeleton Rows -->
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-48"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-2 w-24 rounded-full"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
                             </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4 font-mono text-gray-500">FB-K-0021</td>
-                                <td class="px-6 py-4 font-bold text-gray-900">Mechanical Keyboard G Pro</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div class="h-full bg-amber-500 rounded-full" style="width: 15%"></div>
-                                        </div>
-                                        <span class="font-medium">8</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4"><span class="text-amber-500 font-bold">Low Stock</span></td>
-                                <td class="px-6 py-4 text-right"><button class="text-brand-500 font-bold hover:underline">Update</button></td>
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-40"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-2 w-24 rounded-full"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
                             </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4 font-mono text-gray-500">FB-M-4452</td>
-                                <td class="px-6 py-4 font-bold text-gray-900">Ergonomic Mouse pad</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div class="h-full bg-red-500 rounded-full" style="width: 2%"></div>
-                                        </div>
-                                        <span class="font-medium">0</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4"><span class="text-red-500 font-bold">Out of Stock</span></td>
-                                <td class="px-6 py-4 text-right"><button class="text-brand-500 font-bold hover:underline">Update</button></td>
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-56"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-2 w-24 rounded-full"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
                             </tr>
                         </tbody>
                     </table>
