@@ -26,7 +26,7 @@ async function getById(req, res) {
 // PUT /api/users/:id
 async function update(req, res) {
   try {
-    const { name, role } = req.body;
+    const { name, role, avatar } = req.body;
     const doc = await db.collection('users').doc(req.params.id).get();
     if (!doc.exists) return res.status(404).json({ error: 'Not Found', message: 'User not found.' });
 
@@ -40,6 +40,9 @@ async function update(req, res) {
       const v = isValidRole(role);
       if (!v.valid) return res.status(400).json({ error: 'Validation Error', message: v.message });
       updates.role = role;
+    }
+    if (avatar !== undefined) {
+      updates.avatar = avatar;
     }
 
     if (Object.keys(updates).length === 0) {
