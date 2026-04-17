@@ -1,205 +1,88 @@
-# 🛠️ ForgeAdmin – Frontend (Admin Dashboard UI Only)
+# 🛠️ ForgeAdmin – Full Stack E-Commerce Dashboard
 
 ## 📌 Overview
 
-**ForgeAdmin** is a **frontend-only e-commerce management dashboard** built for the **BackForge Hackathon**.
+**ForgeAdmin** is a **full-stack e-commerce management dashboard** built for the **BackForge Hackathon**.
 
-It provides a complete **admin panel UI** for managing an online store, while leaving all backend logic such as APIs, authentication, and database integration to be implemented separately.
+Originally a static frontend, it has now been completely supercharged with a robust **Node.js/Express Backend** and **Firebase Firestore** database integration. This dashboard simulates a real-world store management system with fully functional modules for:
 
-This dashboard simulates a real-world store management system with modules like:
-
-* Products
-* Orders
-* Inventory
-* Analytics
-* Customers
+* Products (Full CRUD, Search, Pagination)
+* Orders (Complex state management, atomic stock mechanics)
+* Inventory (Stock addition, deductions, manual update logs)
+* Analytics (Dashboard aggregation)
+* Customers (Metadata tracking)
 * Promotions
-* Staff Management
+* Staff Management (Role-based Access Control)
 
-📄 Reference Documentation: 
+---
+
+## 🤖 AI Assistance & Attribution
+
+This project's backend architecture, database integration, and business logic implementation were heavily accelerated using advanced AI coding tools:
+* **GitHub Copilot**
+* **Claude / Advanced Agentic AI Assistants**
+
+These AI tools were utilized to architect the secure proxy pattern, write the Express controllers, implement the Firebase Admin SDK, and wire all static HTML frontend files seamlessly into a dynamic backend state.
 
 ---
 
 ## 🚀 Key Features
 
-* Modern admin dashboard UI
-* Multi-page architecture
-* Fully responsive design
-* Reusable components
-* Backend-ready frontend structure
+* **Real Authentication:** Firebase Client Auth combined with secure Backend Token verification.
+* **Role-Based Access Control (RBAC):** Admin vs. Staff permission handling mapped directly in backend middleware.
+* **Atomic Transactions:** Order completion automatically checks and deducts correct product stock cleanly using Firestore batching.
+* **Protective Referential Integrity:** Backend prevents deletion of active categories if products exist inside them.
+* **Modular Backend Architecture:** Controllers, Routes, Middleware, and Utils.
 
 ---
 
 ## 🏗️ System Architecture
 
-ForgeAdmin follows a **static multi-page dashboard architecture**:
+ForgeAdmin utilizes a **Secure API Proxy Pattern**:
 
-* Each module is built as a separate HTML page
-* Shared CSS and Tailwind styling
-* No backend or database integration
-* Static placeholder data
+**1. UI Layer (Frontend)**
+* HTML / Vanilla JavaScript
+* Tailwind CSS / Font Awesome
+* Firebase Client SDK (Auth only)
 
-### 🔹 Architecture Layers
+**2. API Layer (Backend Proxy)**
+* Node.js / Express.js
+* Custom Middleware (`auth.js`, `roleCheck.js`)
+* Validations
 
-**1. UI Layer**
-
-* HTML
-* CSS + Tailwind CSS
-* Font Awesome icons
-
-**2. Logic Layer**
-
-* Minimal JavaScript
-* No API calls
-* No real functionality
-
-**3. Data Layer**
-
-* No database
-* Static hardcoded data
-
----
-
-## 🔐 Authentication Module
-
-* Login page
-* Signup page
-* Credential input fields
-
-⚠️ *Note: No real authentication or session management is implemented.*
-
----
-
-## 📊 Dashboard Module
-
-* KPI cards (Sales, Revenue, Orders, Customers)
-* Overview analytics
-* Sidebar navigation
-* Recent activity panel
-
----
-
-## 📈 Analytics Module
-
-* Traffic overview
-* Device usage stats
-* Sales trends
-* Engagement metrics
-
----
-
-## 📦 Products Module
-
-* Product listing UI
-* SKU & stock display
-* Search and filter interface
-
----
-
-## 🗂️ Categories Module
-
-* Category listing
-* Product grouping UI
-* Status indicators
-
----
-
-## 📦 Inventory Module
-
-* Stock tracking UI
-* Low-stock alerts
-* Quantity indicators
-
----
-
-## 🧾 Orders Module
-
-* Order listing
-* Status tracking
-* Customer order details
-
----
-
-## 👥 Customers Module
-
-* Customer profiles
-* Purchase history
-* Spending insights
-
----
-
-## ⭐ Reviews Module
-
-* Customer feedback UI
-* Ratings display
-* Sentiment overview
-
----
-
-## 🎯 Promotions Module
-
-* Coupon management UI
-* Discount tracking
-* Expiry indicators
-
----
-
-## 👨‍💼 Staff Module
-
-* Staff listing
-* Role assignment UI
-* Permission overview
-
----
-
-## ⚙️ Settings Module
-
-* Profile settings
-* Email preferences
-* Notification toggles
-
----
-
-## 🎨 UI/UX Design
-
-### Design Principles
-
-* Clean & professional layout
-* Card-based UI
-* Minimal navigation
-* Dashboard-focused experience
-
-### Styling
-
-* Tailwind CSS utilities
-* Custom CSS
-* Rounded cards
-* Soft shadows
-
-### Interactions
-
-* Hover effects
-* Smooth transitions
-* Sidebar animations
-
----
-
-## 📐 Layout Structure
-
-* Multi-page dashboard
-* Shared sidebar & header
-* Responsive grid system
-* Consistent spacing & typography
+**3. Data Layer (Database)**
+* Firebase Firestore (NoSQL)
+* Firebase Admin SDK allowing privileged backend transactions
 
 ---
 
 ## 🧰 Tech Stack
 
-* HTML5
-* CSS3
-* Tailwind CSS
-* Font Awesome 6.4.0
-* Google Fonts (Inter)
+**Frontend:** HTML5, CSS3, Tailwind CSS, Vanilla JS
+**Backend:** Node.js, Express.js
+**Database & Auth:** Firebase (Firestore, Authentication)
+**Tooling:** npm, dotenv, CORS
+
+---
+
+## 🚀 How to Run Locally
+
+### 1. Configure Secrets
+Ensure you have a Firebase project setup (we used `neurodb-6fcf5`).
+You need to put your credentials in two places:
+* `js/firebase-config.js` -> Web App API Key
+* `backend/.env` -> Firebase Admin SDK Project ID, Email, and Private Key.
+
+### 2. Install & Start
+```bash
+cd backend
+npm install
+npm run seed  # Populates your DB with dummy categories, products, and orders
+npm run dev   # Starts the Express Server
+```
+
+### 3. Open Application
+Navigate your browser to `http://localhost:3000`. Create a new account using the UI. Log in, and experience the dashboard!
 
 ---
 
@@ -207,100 +90,29 @@ ForgeAdmin follows a **static multi-page dashboard architecture**:
 
 ```
 /
+├── backend/
+│   ├── controllers/      # Business logic (Orders, Products, Stars, etc.)
+│   ├── middleware/       # JWT verification and RBAC
+│   ├── routes/           # Express API endpoints
+│   ├── utils/            # Validators
+│   ├── seed/             # Database population scripts
+│   ├── server.js         # Entry point
+│   ├── .env              # Secrets (untacked)
+├── js/
+│   ├── pages/            # View-specific logic (e.g., products.js)
+│   ├── api.js            # fetch() wrapper with token injection
+│   ├── auth.js           # Firebase auth and session state
+│   ├── firebase-config.js# Client configuration
 ├── index.html            # Login Page
 ├── style.css             # Global Styles
-├── components/
-│   ├── sidebar.html
-│   └── header.html
-└── pages/
-    ├── signup.html
-    ├── dashboard.html
-    ├── analytics.html
-    ├── products.html
-    ├── categories.html
-    ├── inventory.html
-    ├── orders.html
-    ├── customers.html
-    ├── reviews.html
-    ├── promotions.html
-    ├── staff.html
-    └── settings.html
+└── pages/                # All Dashboard Views
 ```
 
 ---
 
-## 📱 Responsiveness
-
-Optimized for:
-
-* Desktop 💻
-* Tablet 📱
-* Mobile 📲
-
-Using:
-
-* Flexbox
-* CSS Grid
-* Tailwind responsive utilities
-
----
-
-## ⚠️ Limitations
-
-* No backend integration
-* No database
-* No authentication system
-* No API calls
-* No real data handling
-* No dynamic analytics
-
----
-
-## 🔮 Future Enhancements
-
-* Backend API integration
-* JWT/OAuth authentication
-* Real-time analytics
-* Database connectivity
-* Advanced filtering & search
-* Role-based access control
-* Notifications system
-
----
-
-## 🎯 Purpose
-
-ForgeAdmin is designed to:
-
-* Provide a ready-made admin UI
-* Accelerate hackathon development
-* Allow focus on backend implementation
-
----
-
-## 🏁 Conclusion
-
-ForgeAdmin offers a **complete admin dashboard UI foundation** for building a full-stack e-commerce management system.
-
-It helps developers:
-
-* Skip UI development time
-* Focus on backend logic
-* Build scalable admin systems
-
----
-
 ## 🤝 Contribution
-
 This project is part of the **BackForge Hackathon** ecosystem.
-Feel free to fork, extend, and integrate backend solutions.
-
----
 
 ## 📜 License
-
 Open for educational and hackathon use.
-
----
-
 💡 *Manage smarter. Build faster. Forge better.*
