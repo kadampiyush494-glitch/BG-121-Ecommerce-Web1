@@ -21,6 +21,25 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.3s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
@@ -118,21 +137,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="bg-gradient-to-br from-brand-500 to-brand-700 p-6 rounded-2xl text-white shadow-lg shadow-brand-500/20">
                     <p class="text-brand-100 text-sm mb-1">Active Coupons</p>
-                    <h3 class="text-3xl font-bold">12</h3>
+                    <h3 id="active-coupons-count" class="text-3xl font-bold">...</h3>
                     <div class="mt-4 flex items-center gap-2 text-brand-100 text-xs font-medium">
-                        <i class="fa-solid fa-circle-check"></i> 4 starting today
+                        <i class="fa-solid fa-circle-check"></i> Live updates
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Coupon Usage</p>
-                    <h3 class="text-3xl font-bold text-gray-900">842</h3>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm opacity-50">
+                    <p class="text-gray-500 text-sm mb-1">Coupon Usage (Coming Soon)</p>
+                    <h3 class="text-3xl font-bold text-gray-900">--</h3>
                     <div class="mt-4 flex items-center gap-2 text-emerald-500 text-xs font-bold">
-                        <i class="fa-solid fa-arrow-trend-up"></i> 18% Increase
+                        <i class="fa-solid fa-arrow-trend-up"></i>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Total Savings</p>
-                    <h3 class="text-3xl font-bold text-gray-900">$4,250</h3>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm opacity-50">
+                    <p class="text-gray-500 text-sm mb-1">Total Savings (Coming Soon)</p>
+                    <h3 class="text-3xl font-bold text-gray-900">--</h3>
                     <div class="mt-4 flex items-center gap-2 text-gray-400 text-xs font-medium">
                         Last 30 days
                     </div>
@@ -152,22 +171,31 @@
                                 <th class="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4"><span class="px-3 py-1.5 bg-brand-50 text-brand-700 font-bold border border-brand-100 rounded-lg">FORGE25</span></td>
-                                <td class="px-6 py-4 font-bold text-gray-900">25% OFF</td>
-                                <td class="px-6 py-4 text-gray-500">Dec 31, 2025</td>
-                                <td class="px-6 py-4 font-medium text-gray-900">142/500</td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full">Active</span></td>
-                                <td class="px-6 py-4 text-right"><button class="text-gray-400 hover:text-brand-500"><i class="fa-solid fa-pen"></i></button></td>
+                        <tbody id="promotions-tbody" class="text-sm">
+                            <!-- Skeleton Rows -->
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-8 w-24 rounded-lg"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-6 w-16 rounded-full"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
                             </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4"><span class="px-3 py-1.5 bg-gray-50 text-gray-700 font-bold border border-gray-200 rounded-lg">WELCOME10</span></td>
-                                <td class="px-6 py-4 font-bold text-gray-900">$10 Flat</td>
-                                <td class="px-6 py-4 text-gray-500">No Expiry</td>
-                                <td class="px-6 py-4 font-medium text-gray-900">2,105</td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full">Active</span></td>
-                                <td class="px-6 py-4 text-right"><button class="text-gray-400 hover:text-brand-500"><i class="fa-solid fa-pen"></i></button></td>
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-8 w-32 rounded-lg"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-20"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-6 w-16 rounded-full"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="px-6 py-4"><div class="skeleton h-8 w-20 rounded-lg"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-24"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-4 w-16"></div></td>
+                                <td class="px-6 py-4"><div class="skeleton h-6 w-16 rounded-full"></div></td>
+                                <td class="px-6 py-4 text-right"><div class="skeleton h-4 w-12 ml-auto"></div></td>
                             </tr>
                         </tbody>
                     </table>

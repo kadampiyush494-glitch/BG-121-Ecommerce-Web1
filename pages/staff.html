@@ -21,6 +21,25 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.3s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
@@ -115,50 +134,40 @@
         </header>
 
         <div class="p-4 sm:p-6 lg:p-8 flex-1">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <!-- Staff Card -->
+            <div id="staff-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Skeleton Cards -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-xl">JD</div>
+                        <div class="skeleton w-16 h-16 rounded-2xl"></div>
                         <div>
-                            <h3 class="font-bold text-gray-900">John Doe</h3>
-                            <p class="text-xs text-brand-600 font-bold uppercase tracking-wider">Super Admin</p>
+                            <div class="skeleton h-5 w-32 mb-1"></div>
+                            <div class="skeleton h-4 w-24"></div>
                         </div>
                     </div>
                     <div class="space-y-3 mb-6">
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <i class="fa-solid fa-envelope w-5"></i> admin@forgecart.com
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <i class="fa-solid fa-calendar w-5"></i> Joined Oct 2024
-                        </div>
+                        <div class="skeleton h-4 w-48"></div>
+                        <div class="skeleton h-4 w-40"></div>
                     </div>
                     <div class="flex items-center justify-between pt-4 border-t border-gray-50">
-                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full">Online</span>
-                        <button class="text-gray-400 hover:text-brand-500"><i class="fa-solid fa-gear"></i> Manage</button>
+                        <div class="skeleton w-16 h-6 rounded-full"></div>
+                        <div class="skeleton w-16 h-4"></div>
                     </div>
                 </div>
-
-                <!-- Staff Card -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">AS</div>
+                        <div class="skeleton w-16 h-16 rounded-2xl"></div>
                         <div>
-                            <h3 class="font-bold text-gray-900">Alice Smith</h3>
-                            <p class="text-xs text-blue-600 font-bold uppercase tracking-wider">Editor</p>
+                            <div class="skeleton h-5 w-32 mb-1"></div>
+                            <div class="skeleton h-4 w-24"></div>
                         </div>
                     </div>
                     <div class="space-y-3 mb-6">
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <i class="fa-solid fa-envelope w-5"></i> alice@forgecart.com
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <i class="fa-solid fa-calendar w-5"></i> Joined Nov 2024
-                        </div>
+                        <div class="skeleton h-4 w-48"></div>
+                        <div class="skeleton h-4 w-40"></div>
                     </div>
                     <div class="flex items-center justify-between pt-4 border-t border-gray-50">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-400 text-xs font-bold rounded-full">Offline</span>
-                        <button class="text-gray-400 hover:text-brand-500"><i class="fa-solid fa-gear"></i> Manage</button>
+                        <div class="skeleton w-16 h-6 rounded-full"></div>
+                        <div class="skeleton w-16 h-4"></div>
                     </div>
                 </div>
             </div>

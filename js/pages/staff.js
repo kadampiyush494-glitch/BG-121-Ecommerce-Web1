@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
   updateUserUI(user);
 
-  const grid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.xl\\:grid-cols-3');
+  const grid = document.getElementById('staff-grid');
   const addBtn = document.querySelector('button .fa-plus')?.closest('button');
 
   async function loadStaff() {
@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderStaff(data.users || []);
     } catch (err) {
       console.error('Failed to load staff:', err);
+      if (grid) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load staff</p>
+          <p class="text-xs mt-1 text-red-500">${err.message}</p>
+        </div>`;
+      }
     }
   }
 
@@ -28,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const roleColor = isAdmin ? 'text-brand-600' : 'text-blue-600';
       const date = s.created_at ? new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Unknown';
 
-      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+      return `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm data-loaded">
         <div class="flex items-center gap-4 mb-6">
           <div class="w-16 h-16 rounded-2xl ${bgClass} flex items-center justify-center ${textClass} font-bold text-xl">${initials}</div>
           <div>

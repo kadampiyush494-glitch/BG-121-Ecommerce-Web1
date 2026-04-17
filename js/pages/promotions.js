@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
   updateUserUI(user);
 
-  const tbody = document.querySelector('tbody');
+  const tbody = document.getElementById('promotions-tbody');
   const addBtn = document.querySelector('button .fa-plus')?.closest('button');
 
   async function loadPromotions() {
@@ -16,13 +16,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateSummary(data.promotions || []);
     } catch (err) {
       console.error('Failed to load promotions:', err);
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-400">
+          <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>
+          <p class="text-sm font-medium">Failed to load promotions</p>
+          <p class="text-xs mt-1 text-red-500">${err.message}</p>
+        </td></tr>`;
+      }
     }
   }
 
   function updateSummary(promos) {
     const active = promos.filter(p => p.active).length;
-    const cards = document.querySelectorAll('.text-3xl.font-bold');
-    if (cards[0]) cards[0].textContent = active;
+    const activeCard = document.getElementById('active-coupons-count');
+    if (activeCard) activeCard.textContent = active;
   }
 
   function renderPromotions(promos) {
@@ -31,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const statusClass = p.active ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400';
       const codeClass = p.active ? 'bg-brand-50 text-brand-700 border-brand-100' : 'bg-gray-50 text-gray-700 border-gray-200';
 
-      return `<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+      return `<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors data-loaded">
         <td class="px-6 py-4"><span class="px-3 py-1.5 ${codeClass} font-bold border rounded-lg">${p.title}</span></td>
         <td class="px-6 py-4 font-bold text-gray-900">${p.discount_percentage}% OFF</td>
         <td class="px-6 py-4 text-gray-500">${p.active ? 'Active' : 'Expired'}</td>
