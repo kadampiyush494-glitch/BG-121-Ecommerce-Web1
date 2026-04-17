@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -21,83 +23,117 @@
             }
         }
     </script>
+    <style>
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            border-radius: 6px;
+            color: transparent !important;
+        }
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .live-dot {
+            width: 8px; height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: live-blink 1.5s infinite;
+        }
+        @keyframes live-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .data-loaded {
+            animation: fadeInData 0.4s ease-out;
+        }
+        @keyframes fadeInData {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+    <!-- ═══ SIDEBAR ═══ -->
     <aside class="fixed left-0 top-0 h-full w-[270px] bg-sidebar z-50 flex flex-col transition-all duration-300 lg:translate-x-0 hidden lg:flex">
-    <div class="flex items-center gap-3 px-6 h-[72px] border-b border-sidebar-border flex-shrink-0">
-        <div class="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20 flex-shrink-0">
-            <i class="fa-solid fa-fire text-white"></i>
-        </div>
-        <div class="sidebar-text">
-            <h1 class="text-white font-bold text-lg leading-tight">ForgeAdmin</h1>
-            <p class="text-brand-400 text-[11px] font-medium">BackForge Store</p>
-        </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
-        <p class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">Main Menu</p>
-        <a href="dashboard.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-layer-group w-5 text-center"></i>
-            <span class="sidebar-text">Dashboard</span>
-        </a>
-        <a href="analytics.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-brand-500/10 text-brand-400">
-            <i class="fa-solid fa-chart-line w-5 text-center"></i>
-            <span class="sidebar-text">Analytics</span>
-        </a>
-        <a href="products.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-box w-5 text-center"></i>
-            <span class="sidebar-text">Products</span>
-            <span class="sidebar-text ml-auto bg-brand-500/20 text-brand-400 text-[11px] font-semibold px-2 py-0.5 rounded-full">24</span>
-        </a>
-        <a href="categories.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-tags w-5 text-center"></i>
-            <span class="sidebar-text">Categories</span>
-        </a>
-        <a href="inventory.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-warehouse w-5 text-center"></i>
-            <span class="sidebar-text">Inventory</span>
-        </a>
-        <a href="orders.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-bag-shopping w-5 text-center"></i>
-            <span class="sidebar-text">Orders</span>
-            <span class="sidebar-text ml-auto w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-        </a>
-        <a href="customers.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-users w-5 text-center"></i>
-            <span class="sidebar-text">Customers</span>
-        </a>
-        <a href="reviews.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-star w-5 text-center"></i>
-            <span class="sidebar-text">Reviews</span>
-        </a>
-        <p class="px-3 mt-6 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">Marketing</p>
-        <a href="promotions.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-ticket w-5 text-center"></i>
-            <span class="sidebar-text">Promotions</span>
-        </a>
-        <p class="px-3 mt-6 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">System</p>
-        <a href="staff.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-user-shield w-5 text-center"></i>
-            <span class="sidebar-text">Staff</span>
-        </a>
-        <a href="settings.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
-            <i class="fa-solid fa-gear w-5 text-center"></i>
-            <span class="sidebar-text">Settings</span>
-        </a>
-    </nav>nav>
-    <div class="border-t border-sidebar-border p-4 flex-shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
-            <div class="sidebar-text min-w-0">
-                <p class="text-white text-sm font-semibold truncate">John Doe</p>
-                <p class="text-gray-500 text-xs truncate">admin@forgecart.com</p>
+        <div class="flex items-center gap-3 px-6 h-[72px] border-b border-sidebar-border flex-shrink-0">
+            <div class="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20 flex-shrink-0">
+                <i class="fa-solid fa-fire text-white"></i>
             </div>
-            <a href="../index.html" class="sidebar-text ml-auto text-gray-500 hover:text-red-400 transition-colors" title="Logout">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            </a>
+            <div class="sidebar-text">
+                <h1 class="text-white font-bold text-lg leading-tight">ForgeAdmin</h1>
+                <p class="text-brand-400 text-[11px] font-medium">BackForge Store</p>
+            </div>
         </div>
-    </div>
-</aside>
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
+            <p class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">Main Menu</p>
+            <a href="dashboard.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-layer-group w-5 text-center"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a href="analytics.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-brand-500/10 text-brand-400">
+                <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                <span class="sidebar-text">Analytics</span>
+            </a>
+            <a href="products.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-box w-5 text-center"></i>
+                <span class="sidebar-text">Products</span>
+                <span id="sidebar-product-count" class="sidebar-text ml-auto bg-brand-500/20 text-brand-400 text-[11px] font-semibold px-2 py-0.5 rounded-full">—</span>
+            </a>
+            <a href="categories.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-tags w-5 text-center"></i>
+                <span class="sidebar-text">Categories</span>
+            </a>
+            <a href="inventory.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-warehouse w-5 text-center"></i>
+                <span class="sidebar-text">Inventory</span>
+            </a>
+            <a href="orders.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-bag-shopping w-5 text-center"></i>
+                <span class="sidebar-text">Orders</span>
+                <span class="sidebar-text ml-auto w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+            </a>
+            <a href="customers.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-users w-5 text-center"></i>
+                <span class="sidebar-text">Customers</span>
+            </a>
+            <a href="reviews.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-star w-5 text-center"></i>
+                <span class="sidebar-text">Reviews</span>
+            </a>
+            <p class="px-3 mt-6 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">Marketing</p>
+            <a href="promotions.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-ticket w-5 text-center"></i>
+                <span class="sidebar-text">Promotions</span>
+            </a>
+            <p class="px-3 mt-6 mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500 sidebar-text">System</p>
+            <a href="staff.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-user-shield w-5 text-center"></i>
+                <span class="sidebar-text">Staff</span>
+            </a>
+            <a href="settings.html" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-sidebar-hover">
+                <i class="fa-solid fa-gear w-5 text-center"></i>
+                <span class="sidebar-text">Settings</span>
+            </a>
+        </nav>
+        <div class="border-t border-sidebar-border p-4 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">JD</div>
+                <div class="sidebar-text min-w-0">
+                    <p class="text-white text-sm font-semibold truncate">John Doe</p>
+                    <p class="text-gray-500 text-xs truncate">admin@forgecart.com</p>
+                </div>
+                <a href="../index.html" class="sidebar-text ml-auto text-gray-500 hover:text-red-400 transition-colors" title="Logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
     <main class="flex-1 lg:ml-[270px] min-h-screen transition-all duration-300 flex flex-col">
+        <!-- Header -->
         <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-100">
             <div class="flex items-center justify-between h-[72px] px-4 sm:px-6">
                 <div class="flex items-center gap-3">
@@ -108,120 +144,210 @@
                         <input type="text" placeholder="Search anything..." class="forge-search">
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div class="hidden md:flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
-                        <button class="px-3 py-1.5 text-xs font-medium bg-white shadow-sm rounded-md text-gray-900">7 Days</button>
-                        <button class="px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-900">30 Days</button>
-                        <button class="px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-900">Custom</button>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <div class="live-dot"></div>
+                        <span id="live-status" class="text-xs font-medium text-emerald-600">Connecting…</span>
+                        <span id="last-updated" class="text-xs text-gray-400 ml-1">—</span>
                     </div>
+                    <div class="w-px h-8 bg-gray-200 mx-1 hidden sm:block"></div>
+                    <button class="flex items-center gap-2.5 pl-2 pr-3 py-1.5 hover:bg-gray-100 rounded-xl transition-colors">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-xs">JD</div>
+                        <div class="hidden sm:block text-left">
+                            <p class="text-sm font-semibold text-gray-800 leading-tight">John Doe</p>
+                            <p class="text-[11px] text-gray-400">Administrator</p>
+                        </div>
+                    </button>
                 </div>
             </div>
         </header>
 
         <div class="p-4 sm:p-6 lg:p-8 flex-1">
+            <!-- Page Title -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Analytics</h2>
+                    <p class="text-gray-500 mt-1">Real-time business insights from your store data</p>
+                </div>
+            </div>
+
+            <!-- ═══════ ROW 1: KPI CARDS ═══════ -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Avg Order Value -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Conversion Rate</p>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-receipt text-brand-500"></i>
+                        </div>
+                        <p class="text-gray-500 text-sm">Avg Order Value</p>
+                    </div>
                     <div class="flex items-end justify-between">
-                        <h3 class="text-2xl font-bold text-gray-900">3.48%</h3>
-                        <span class="text-emerald-500 text-xs font-bold mb-1"><i class="fa-solid fa-caret-up mr-1"></i>12%</span>
+                        <h3 id="kpi-aov" class="text-2xl font-bold text-gray-900 skeleton" style="min-width:90px;display:inline-block;">Loading</h3>
                     </div>
                     <div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-brand-500 rounded-full" style="width: 65%"></div>
+                        <div id="bar-aov" class="h-full bg-brand-500 rounded-full transition-all duration-700" style="width: 0%"></div>
                     </div>
                 </div>
+                <!-- Completion Rate -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Average Order Value</p>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                        </div>
+                        <p class="text-gray-500 text-sm">Completion Rate</p>
+                    </div>
                     <div class="flex items-end justify-between">
-                        <h3 class="text-2xl font-bold text-gray-900">$128.50</h3>
-                        <span class="text-emerald-500 text-xs font-bold mb-1"><i class="fa-solid fa-caret-up mr-1"></i>8%</span>
+                        <h3 id="kpi-completion" class="text-2xl font-bold text-gray-900 skeleton" style="min-width:70px;display:inline-block;">Loading</h3>
                     </div>
                     <div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-blue-500 rounded-full" style="width: 45%"></div>
+                        <div id="bar-completion" class="h-full bg-emerald-500 rounded-full transition-all duration-700" style="width: 0%"></div>
                     </div>
                 </div>
+                <!-- Cancellation Rate -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Bounce Rate</p>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-ban text-red-500"></i>
+                        </div>
+                        <p class="text-gray-500 text-sm">Cancellation Rate</p>
+                    </div>
                     <div class="flex items-end justify-between">
-                        <h3 class="text-2xl font-bold text-gray-900">42.1%</h3>
-                        <span class="text-red-500 text-xs font-bold mb-1"><i class="fa-solid fa-caret-down mr-1"></i>5%</span>
+                        <h3 id="kpi-cancel" class="text-2xl font-bold text-gray-900 skeleton" style="min-width:70px;display:inline-block;">Loading</h3>
                     </div>
                     <div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-red-500 rounded-full" style="width: 42%"></div>
+                        <div id="bar-cancel" class="h-full bg-red-500 rounded-full transition-all duration-700" style="width: 0%"></div>
                     </div>
                 </div>
+                <!-- Revenue per Customer -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p class="text-gray-500 text-sm mb-1">Sessions</p>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-user-tag text-violet-500"></i>
+                        </div>
+                        <p class="text-gray-500 text-sm">Revenue / Customer</p>
+                    </div>
                     <div class="flex items-end justify-between">
-                        <h3 class="text-2xl font-bold text-gray-900">12,842</h3>
-                        <span class="text-emerald-500 text-xs font-bold mb-1"><i class="fa-solid fa-caret-up mr-1"></i>24%</span>
+                        <h3 id="kpi-rpc" class="text-2xl font-bold text-gray-900 skeleton" style="min-width:90px;display:inline-block;">Loading</h3>
                     </div>
                     <div class="mt-4 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 78%"></div>
+                        <div id="bar-rpc" class="h-full bg-violet-500 rounded-full transition-all duration-700" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
+            <!-- ═══════ ROW 2: CHARTS — Revenue by Category + Order Status ═══════ -->
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+                <!-- Revenue by Category — Bar Chart -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-6">Traffic Sources</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-medium text-gray-600 w-24">Direct</span>
-                            <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-500 rounded-full" style="width: 65%"></div>
-                            </div>
-                            <span class="text-sm font-bold text-gray-900 w-12 text-right">65%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-medium text-gray-600 w-24">Social Media</span>
-                            <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-500 rounded-full" style="width: 45%"></div>
-                            </div>
-                            <span class="text-sm font-bold text-gray-900 w-12 text-right">45%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-medium text-gray-600 w-24">Email</span>
-                            <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-emerald-500 rounded-full" style="width: 32%"></div>
-                            </div>
-                            <span class="text-sm font-bold text-gray-900 w-12 text-right">32%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-medium text-gray-600 w-24">Referrals</span>
-                            <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-violet-500 rounded-full" style="width: 18%"></div>
-                            </div>
-                            <span class="text-sm font-bold text-gray-900 w-12 text-right">18%</span>
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-gray-900">Revenue by Category</h3>
+                        <span class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-lg">
+                            <div class="live-dot" style="width:6px;height:6px;"></div> Live
+                        </span>
+                    </div>
+                    <div class="h-72 relative">
+                        <canvas id="revenueByCategoryChart"></canvas>
+                        <div id="rev-cat-empty" class="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 rounded-xl border border-dashed border-gray-200" style="display:none;">
+                            <div class="text-center"><i class="fa-solid fa-chart-column text-4xl mb-2"></i><p class="text-sm">No category revenue data yet</p></div>
                         </div>
                     </div>
                 </div>
+                <!-- Order Status — Doughnut Chart -->
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-6">Device Breakdown</h3>
-                    <div class="flex items-center justify-around h-48">
-                        <div class="text-center">
-                            <div class="w-24 h-24 rounded-full border-8 border-brand-500 border-t-transparent flex items-center justify-center mb-2">
-                                <span class="text-lg font-bold">58%</span>
-                            </div>
-                            <p class="text-xs text-gray-500">Mobile</p>
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-gray-900">Order Status Breakdown</h3>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="orderStatusChart"></canvas>
+                        <div id="status-empty" class="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 rounded-xl border border-dashed border-gray-200" style="display:none;">
+                            <div class="text-center"><i class="fa-solid fa-chart-pie text-4xl mb-2"></i><p class="text-sm">No orders yet</p></div>
                         </div>
-                        <div class="text-center">
-                            <div class="w-24 h-24 rounded-full border-8 border-blue-500 border-t-transparent flex items-center justify-center mb-2">
-                                <span class="text-lg font-bold">32%</span>
-                            </div>
-                            <p class="text-xs text-gray-500">Desktop</p>
+                    </div>
+                    <div id="status-legend" class="flex items-center justify-center gap-6 mt-4"></div>
+                </div>
+            </div>
+
+            <!-- ═══════ ROW 3: Orders Timeline + Top Products ═══════ -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+                <!-- Orders over Time — Line Chart -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-gray-900">Orders Timeline</h3>
+                        <span class="text-xs text-gray-400">Orders grouped by date</span>
+                    </div>
+                    <div class="h-72 relative">
+                        <canvas id="ordersTimelineChart"></canvas>
+                        <div id="timeline-empty" class="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 rounded-xl border border-dashed border-gray-200" style="display:none;">
+                            <div class="text-center"><i class="fa-solid fa-chart-line text-4xl mb-2"></i><p class="text-sm">No order timeline data</p></div>
                         </div>
-                        <div class="text-center">
-                            <div class="w-24 h-24 rounded-full border-8 border-emerald-500 border-t-transparent flex items-center justify-center mb-2">
-                                <span class="text-lg font-bold">10%</span>
+                    </div>
+                </div>
+                <!-- Top Products — Horizontal Bar -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-gray-900">Top Selling Products</h3>
+                        <span class="text-xs text-gray-400">By quantity sold</span>
+                    </div>
+                    <div class="h-72 relative">
+                        <canvas id="topProductsChart"></canvas>
+                        <div id="products-empty" class="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 rounded-xl border border-dashed border-gray-200" style="display:none;">
+                            <div class="text-center"><i class="fa-solid fa-boxes-stacked text-4xl mb-2"></i><p class="text-sm">No product sales data</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════ ROW 4: Customer Insights + Review Stats ═══════ -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <!-- Top Customers by Spending -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-900">Top Customers</h3>
+                        <span class="text-xs text-gray-400">By total spending</span>
+                    </div>
+                    <div id="top-customers-list" class="divide-y divide-gray-50">
+                        <div class="px-6 py-4"><div class="skeleton" style="height:20px;width:100%;"></div></div>
+                        <div class="px-6 py-4"><div class="skeleton" style="height:20px;width:100%;"></div></div>
+                        <div class="px-6 py-4"><div class="skeleton" style="height:20px;width:100%;"></div></div>
+                        <div class="px-6 py-4"><div class="skeleton" style="height:20px;width:100%;"></div></div>
+                        <div class="px-6 py-4"><div class="skeleton" style="height:20px;width:100%;"></div></div>
+                    </div>
+                </div>
+                <!-- Review Summary -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-900">Review Summary</h3>
+                        <span class="text-xs text-gray-400">Avg rating & distribution</span>
+                    </div>
+                    <div class="p-6">
+                        <!-- Avg Rating -->
+                        <div class="flex items-center gap-6 mb-6">
+                            <div class="text-center">
+                                <p id="avg-rating" class="text-4xl font-bold text-gray-900 skeleton" style="min-width:60px;display:inline-block;">—</p>
+                                <div id="avg-stars" class="flex items-center justify-center gap-0.5 mt-1 text-gray-300">
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                </div>
+                                <p id="review-count" class="text-xs text-gray-400 mt-1">— reviews</p>
                             </div>
-                            <p class="text-xs text-gray-500">Tablet</p>
+                            <div class="flex-1 space-y-2" id="rating-bars">
+                                <!-- 5 star to 1 star bars -->
+                                <div class="flex items-center gap-2"><span class="text-xs text-gray-500 w-4">5</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:0%" id="bar-5"></div></div><span class="text-xs text-gray-400 w-6 text-right" id="count-5">0</span></div>
+                                <div class="flex items-center gap-2"><span class="text-xs text-gray-500 w-4">4</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:0%" id="bar-4"></div></div><span class="text-xs text-gray-400 w-6 text-right" id="count-4">0</span></div>
+                                <div class="flex items-center gap-2"><span class="text-xs text-gray-500 w-4">3</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:0%" id="bar-3"></div></div><span class="text-xs text-gray-400 w-6 text-right" id="count-3">0</span></div>
+                                <div class="flex items-center gap-2"><span class="text-xs text-gray-500 w-4">2</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:0%" id="bar-2"></div></div><span class="text-xs text-gray-400 w-6 text-right" id="count-2">0</span></div>
+                                <div class="flex items-center gap-2"><span class="text-xs text-gray-500 w-4">1</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-amber-400 rounded-full" style="width:0%" id="bar-1"></div></div><span class="text-xs text-gray-400 w-6 text-right" id="count-1">0</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
     <!-- Firebase CDN -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
