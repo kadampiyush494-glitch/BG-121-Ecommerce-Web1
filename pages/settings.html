@@ -178,12 +178,14 @@
             <h3 class="text-lg font-bold text-gray-900 mb-6">Profile Settings</h3>
             
             <div class="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100">
-                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-brand-500/30">
-                    JD
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-brand-500/30 relative overflow-hidden">
+                    <img id="avatar-preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="Avatar">
+                    <span id="avatar-initials">JD</span>
                 </div>
                 <div>
-                    <button class="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors mb-2 block">Change Avatar</button>
-                    <p class="text-xs text-gray-500">JPG, GIF or PNG. Max size of 800K</p>
+                    <label for="avatar-upload" class="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors mb-2 block cursor-pointer inline-block text-center">Change Avatar</label>
+                    <input type="file" id="avatar-upload" class="hidden" accept="image/jpeg, image/png, image/gif">
+                    <p class="text-xs text-gray-500">JPG, GIF or PNG. Max size of 5MB</p>
                 </div>
             </div>
 

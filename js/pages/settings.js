@@ -20,7 +20,67 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Profile initials
   const initials = user.name ? user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : 'JD';
-  document.querySelectorAll('.w-20.h-20').forEach(el => { el.textContent = initials; });
+  const initialElements = document.querySelectorAll('.w-20.h-20, #avatar-initials');
+  initialElements.forEach(el => { el.textContent = initials; });
+
+  let avatarBase64 = user.avatar || null;
+  const avatarPreview = document.getElementById('avatar-preview');
+  const avatarInitials = document.getElementById('avatar-initials');
+
+  if (avatarBase64) {
+    avatarPreview.src = avatarBase64;
+    avatarPreview.classList.remove('hidden');
+    avatarInitials.classList.add('hidden');
+  }
+
+  const avatarUpload = document.getElementById('avatar-upload');
+  if (avatarUpload) {
+    avatarUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('File too large. Max 5MB.', 'error');
+        avatarUpload.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const max_dim = 256;
+
+          if (width > height) {
+            if (width > max_dim) {
+              height *= max_dim / width;
+              width = max_dim;
+            }
+          } else {
+            if (height > max_dim) {
+              width *= max_dim / height;
+              height = max_dim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          avatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          avatarPreview.src = avatarBase64;
+          avatarPreview.classList.remove('hidden');
+          avatarInitials.classList.add('hidden');
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
   // Save button
   const saveBtn = document.querySelector('button');
@@ -36,9 +96,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       try {
-        await api.put(`/users/${user.id}`, { name: fullName });
+        const payload = { name: fullName };
+        if (avatarBase64 !== null) payload.avatar = avatarBase64;
+
+        await api.put(`/users/${user.id}`, payload);
         // Update session
         user.name = fullName;
+        if (avatarBase64 !== null) user.avatar = avatarBase64;
         sessionStorage.setItem('forgeadmin_user', JSON.stringify(user));
         showToast('Settings saved!', 'success');
         updateUserUI(user);
